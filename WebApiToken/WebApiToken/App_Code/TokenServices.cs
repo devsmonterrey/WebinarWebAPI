@@ -22,13 +22,14 @@ namespace WebApiToken
                 ExpiresOn = expiredOn
             };
             webinarModel.Tokens.Add(tokenDomain);
+            webinarModel.SaveChanges();
             return tokenDomain;
         }
 
         public bool ValidateToken(string tokenId)
         {
             webinarModel webinarModel = new webinarModel();
-            var token = webinarModel.Tokens.First(x => x.AuthToken == tokenId && x.ExpiresOn > DateTime.Now);
+            var token = webinarModel.Tokens.FirstOrDefault(x => x.AuthToken == tokenId && x.ExpiresOn > DateTime.Now);
             if (token != null && !(DateTime.Now > token.ExpiresOn))
             {
                 token.ExpiresOn = DateTime.Now.AddDays(5);
